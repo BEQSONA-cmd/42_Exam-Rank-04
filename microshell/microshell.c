@@ -26,27 +26,14 @@ int	ft_cd(char **av, int i)
 	return (0);
 }
 
-int	ft_handle_fds(int *fd, int is_child, int pipes)
+int	ft_handle_fds(int *fd, int i, int pipes)
 {
 	if (pipes)
 	{
-		if (is_child)
+		if (dup2(fd[i], i) == -1 || close(fd[0]) == -1 || close(fd[1]) == -1)
 		{
-			if (dup2(fd[1], 1) == -1 || close(fd[0]) == -1 || close(fd[1]) ==
-				-1)
-			{
-				ft_error("fatal", "");
-				return (1);
-			}
-		}
-		else
-		{
-			if (dup2(fd[0], 0) == -1 || close(fd[0]) == -1 || close(fd[1]) ==
-				-1)
-			{
-				ft_error("fatal", "");
-				return (1);
-			}
+			ft_error("fatal", "");
+			return (1);
 		}
 	}
 	return (0);
